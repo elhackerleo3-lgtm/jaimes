@@ -847,7 +847,43 @@
           ['gpresult /r', 'Muestra las directivas de grupo aplicadas.']
         ],
         raw: `systeminfo\ntasklist\ntaskkill /PID 1234 /F\nipconfig /all\narp -a\nnetstat -ano\nsfc /scannow\nDISM /Online /Cleanup-Image /ScanHealth\nchkdsk C: /scan\ngpresult /r`
+      },
+            {
+        id: 'office-2021-ospp',
+        tituloCorto: 'Office 2021 (OSPP.VBS)',
+        titulo: 'Activación de Office 2021 (OSPP.VBS)',
+        categoria: 'Microsoft Office',
+        archivo: 'office_2021_activacion.txt',
+        resumen: 'Consulta el estado de licencia e introduce una clave válida de 25 caracteres para activar Office 2021.',
+        pasos: [
+          {
+            titulo: '1. Ubicar herramienta OSPP.VBS de Office',
+            desc: 'Detecta la ruta de instalación de Office (64 o 32 bits) en el sistema.',
+            cmd: 'set "OSPP=%ProgramFiles%\\Microsoft Office\\Office16\\OSPP.VBS" & if not exist "%OSPP%" set "OSPP=%ProgramFiles(x86)%\\Microsoft Office\\Office16\\OSPP.VBS"'
+          },
+          {
+            titulo: '2. Consultar estado de la licencia',
+            desc: 'Muestra información detallada de las licencias instaladas y su estado.',
+            cmd: 'cscript //nologo "%OSPP%" /dstatus'
+          },
+          {
+            titulo: '3. Ingresar clave de producto (25 caracteres)',
+            desc: 'Solicita la clave válida por consola y la registra en Office.',
+            cmd: 'set /p KEY=Ingresa tu clave de 25 caracteres: & cscript //nologo "%OSPP%" /inpkey:%KEY%'
+          },
+          {
+            titulo: '4. Ejecutar activación de Office',
+            desc: 'Intenta activar el producto con la clave ingresada.',
+            cmd: 'cscript //nologo "%OSPP%" /act'
+          }
+        ],
+        verificacion: [
+          'Abre Word o Excel y entra a Archivo > Cuenta.',
+          'Verifica que en Información del producto aparezca como activado.'
+        ],
+        raw: '@echo off\ntitle ACTIVACION MICROSOFT OFFICE 2021\ncolor 0A\n\necho ========================================\necho       OFFICE 2021 - ACTIVACION\necho ========================================\n\nset "OSPP=%ProgramFiles%\\Microsoft Office\\Office16\\OSPP.VBS"\n\nif not exist "%OSPP%" (\n    set "OSPP=%ProgramFiles(x86)%\\Microsoft Office\\Office16\\OSPP.VBS"\n)\n\nif not exist "%OSPP%" (\n    echo No se encontro OSPP.VBS.\n    pause\n    exit /b\n)\n\necho.\necho 1. Consultar licencia\ncscript //nologo "%OSPP%" /dstatus\n\necho.\necho 2. Para activar, introduce una clave valida.\nset /p KEY=Ingresa tu clave de 25 caracteres:\n\ncscript //nologo "%OSPP%" /inpkey:%KEY%\n\necho.\necho Intentando activar Office...\ncscript //nologo "%OSPP%" /act\npause'
       }
+
     ];
 
     let scriptSeleccionadoId = SCRIPTS_DATA[0].id;
