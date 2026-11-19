@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050b12" />
+  <title>SOPORTE TÉCNICO — DOMINGUEZ JAIMES</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #040911;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px 15px;
+      overflow-x: hidden;
+      color: #ffffff;
+    }
+
+    /* Fondo Gengar y Pikachu con marcas neón visibles e iluminadas */
+    .fondo-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: url('fondo.png.jpg') center/cover no-repeat;
+      filter: brightness(1.12) contrast(1.1) saturate(1.25);
+      pointer-events: none;
+    }
+
+    .fondo-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(rgba(0, 8, 15, 0.2), rgba(0, 8, 15, 0.42)),
+        radial-gradient(circle, transparent 48%, rgba(0, 0, 0, 0.5) 100%);
+      pointer-events: none;
+    }
+
+    #particulas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .particula {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #00eaff;
+      box-shadow: 0 0 14px #00eaff, 0 0 24px #009dff;
+      animation: subir linear infinite;
+    }
+
+    @keyframes subir {
+      from { transform: translateY(105vh); opacity: 0; }
+      20% { opacity: 1; }
+      to { transform: translateY(-10vh); opacity: 0; }
+    }
+
+    .contenido {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: entrada 0.8s ease;
+    }
+
+    @keyframes entrada {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .titulo {
+      font-family: Georgia, serif;
+      font-size: clamp(35px, 7vw, 65px);
+      text-align: center;
+      letter-spacing: 3px;
+      margin: 0 0 22px 0;
+      text-shadow: 0 0 12px #00d9ff, 0 0 35px #008cff;
+      animation: brillo 3s infinite alternate;
+    }
+
+    @keyframes brillo {
+      from { filter: brightness(0.9); }
+      to { filter: brightness(1.35); }
+    }
+
+    .contenedor-login {
+      width: 100%;
+      max-width: 390px;
+      padding: 30px;
+      text-align: center;
+      background: rgba(5, 15, 30, 0.90);
+      border: 1px solid rgba(0, 195, 255, 0.7);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 25px #007bff55, 0 0 70px #00c8ff22;
+      transition: max-width 0.35s ease, box-shadow 0.4s ease;
+      animation: tarjeta 4s infinite alternate;
+    }
+
+    .contenedor-login.modo-amplio {
+      max-width: 960px;
+      text-align: left;
+    }
+
+    @keyframes tarjeta {
+      from { box-shadow: 0 0 18px #007bff44, 0 0 45px #00c8ff1a; }
+      to { box-shadow: 0 0 36px #00c8ff66, 0 0 75px #008cff2e; }
+    }
+
+    .avatar-circular {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #00aaff;
+      box-shadow: 0 0 15px #00bfff, 0 0 35px #008cff66;
+      margin-bottom: 12px;
+      animation: flotar 3s infinite ease-in-out;
+    }
+
+    .avatar-pequeno {
+      width: 68px;
+      height: 68px;
+      margin-bottom: 8px;
+    }
+
+    @keyframes flotar {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
+    h2 { margin: 8px 0; }
+    h3 {
+      color: #00c8ff;
+      font-size: 22px;
+      margin: 8px 0;
+      text-shadow: 0 0 12px #008cff;
+    }
+
+    p {
+      color: #e3eaf5;
+      font-size: 14px;
+      margin: 6px 0 16px;
+    }
+
+    .campo-clave {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    input[type="password"],
+    input[type="text"],
+    input[type="search"] {
+      width: 100%;
+      padding: 14px 40px 14px 14px;
+      border: 1px solid #254d70;
+      border-radius: 8px;
+      background: #030c19;
+      color: #ffffff;
+      text-align: center;
+      outline: none;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    input[type="search"] {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #00eaff;
+      box-shadow: 0 0 18px #00c8ff88;
+    }
+
+    .btn-ojo {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      width: auto;
+      padding: 4px 6px;
+      margin: 0;
+      box-shadow: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-ojo:hover {
+      background: transparent;
+      color: #00eaff;
+      transform: translateY(-50%);
+      box-shadow: none;
+    }
+
+    button.btn-principal {
+      width: 100%;
+      padding: 13px;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #0066ff, #00baff);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #008cff55;
+      transition: 0.3s;
+      margin-top: 5px;
+    }
+
+    button.btn-principal:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(90deg, #008cff, #00eaff);
+      box-shadow: 0 0 25px #00c8ff99;
+    }
+
+    button.btn-principal:active {
+      transform: scale(0.97);
+    }
+
+    .btn-regresar {
+      width: 100%;
+      max-width: 320px;
+      padding: 12px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #273849, #43576b);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: 0.25s;
+    }
+
+    .btn-regresar:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(90deg, #33485e, #536c85);
+    }
+
+    .btn-link-sutil {
+      margin-top: 12px;
+      background: transparent;
+      border: none;
+      color: #7dd3fc;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .btn-link-sutil:hover { color: #ffffff; }
+
+    /* Barra de progreso Intro / Bienvenida */
+    .barra-progreso-wrap {
+      width: 100%;
+      height: 8px;
+      background: #030c19;
+      border: 1px solid rgba(0, 200, 255, 0.35);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 14px 0 6px;
+    }
+
+    .barra-progreso-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0066ff, #00baff, #00eaff);
+      box-shadow: 0 0 14px #00eaff;
+      transition: width 0.12s linear;
+    }
+
+    .contador {
+      color: #00eaff;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 10px 14px;
+      border: 1px solid #00c8ff55;
+      border-radius: 8px;
+      background: #00aaff11;
+      margin: 10px auto 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .btn-mini {
+      background: rgba(0, 200, 255, 0.16);
+      border: 1px solid rgba(0, 200, 255, 0.45);
+      color: #00eaff;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-mini:hover {
+      background: #00baff;
+      color: #ffffff;
+    }
+
+    /* Pestañas para separar Descargas de la nueva Carpeta Scripts CMD */
+    .tabs-carpetas {
+      display: flex;
+      gap: 6px;
+      background: #030c19;
+      border: 1px solid rgba(0, 200, 255, 0.3);
+      border-radius: 10px;
+      padding: 4px;
+      margin: 0 auto 16px;
+      max-width: 340px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 9px 10px;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tab-btn.activo {
+      background: linear-gradient(90deg, #0066ff, #00baff);
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(0, 180, 255, 0.45);
+    }
+
+    .seccion-descargas {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-top: 8px;
+    }
+
+    .carpeta-link {
+      display: block;
+      padding: 13px;
+      background: #00559122;
+      color: #00c8ff;
+      text-decoration: none;
+      border: 1px solid #008cff;
+      border-radius: 9px;
+      font-weight: bold;
+      font-size: 14px;
+      transition: 0.25s;
+    }
+
+    .carpeta-link:hover {
+      background: linear-gradient(90deg, #0066ff, #00baff);
+      color: #ffffff;
+      transform: translateX(4px);
+      box-shadow: 0 0 18px #008cff;
+    }
+
+    .separador-carpeta {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0, 200, 255, 0.22);
+    }
+
+    .btn-abrir-scripts {
+      width: 100%;
+      padding: 12px;
+      border-radius: 9px;
+      border: 1px solid rgba(0, 229, 255, 0.65);
+      background: rgba(0, 200, 255, 0.14);
+      color: #00eaff;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+      transition: 0.25s;
+    }
+
+    .btn-abrir-scripts:hover {
+      background: #00baff;
+      color: #ffffff;
+      box-shadow: 0 0 22px rgba(0, 229, 255, 0.6);
+    }
+
+    /* Estilos de la carpeta independiente de Scripts CMD */
+    .scripts-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .scripts-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .scripts-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .script-item-btn {
+      width: 100%;
+      text-align: left;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 200, 255, 0.2);
+      background: rgba(3, 12, 25, 0.85);
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .script-item-btn:hover {
+      border-color: rgba(0, 229, 255, 0.55);
+    }
+
+    .script-item-btn.activo {
+      border-color: #00eaff;
+      background: rgba(0, 170, 255, 0.18);
+      box-shadow: 0 0 16px rgba(0, 212, 255, 0.22);
+    }
+
+    .script-item-titulo {
+      display: block;
+      font-weight: bold;
+      font-size: 13px;
+      color: #ffffff;
+    }
+
+    .script-item-sub {
+      display: block;
+      font-size: 11px;
+      color: #7dd3fc;
+      margin-top: 3px;
+    }
+
+    .script-detalle {
+      background: rgba(3, 11, 23, 0.9);
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .detalle-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.18);
+      padding-bottom: 12px;
+    }
+
+    .aviso-admin {
+      background: rgba(120, 53, 15, 0.35);
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      color: #fde68a;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 12px;
+      margin: 12px 0;
+    }
+
+    .paso-bloque {
+      background: #020813;
+      border: 1px solid rgba(0, 200, 255, 0.2);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .paso-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .paso-titulo {
+      font-weight: bold;
+      color: #7dd3fc;
+      font-size: 14px;
+    }
+
+    pre.cmd-code {
+      background: #01050b;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #38bdf8;
+      font-family: Consolas, 'JetBrains Mono', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 8px 0 4px;
+    }
+
+    table.cmd-tabla {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    table.cmd-tabla th,
+    table.cmd-tabla td {
+      border-bottom: 1px solid rgba(0, 200, 255, 0.16);
+      padding: 9px 8px;
+      text-align: left;
+    }
+
+    table.cmd-tabla th {
+      color: #7dd3fc;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    table.cmd-tabla code {
+      color: #38bdf8;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .pie {
+      color: #ffffff99;
+      font-size: 11px;
+      margin-top: 22px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    #mensajeError { color: #ff6464; display: none; font-weight: 600; margin-top: 10px; }
+    #bienvenida h2 { color: #00eaff; text-shadow: 0 0 20px #00eaff; }
+    #despedida h2 { color: #ff5555; text-shadow: 0 0 20px #ff2222; }
+
+    .oculto { display: none !important; }
+
+    @media (max-width: 780px) {
+      .scripts-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 18px 12px; }
+      .contenedor-login { padding: 24px 18px; }
+      .titulo { margin-bottom: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Fondo Gengar y Pikachu iluminado + partículas -->
+  <div class="fondo-bg"></div>
+  <div class="fondo-overlay"></div>
+  <div id="particulas"></div>
+
+  <div class="contenido">
+    <h1 class="titulo">SOPORTE TÉCNICO</h1>
+
+    <div id="tarjetaPrincipal" class="contenedor-login">
+      <!-- 1. INTRO -->
+      <div id="pantallaIntro">
+        <img src="logo.png" class="avatar-circular" alt="Logo ELHACKERLEOYT" />
+        <h3>DOMINGUEZ JAIMES</h3>
+        <p>Portal de utilidades de Windows, drivers y carpeta técnica de comandos CMD.</p>
+        <div class="barra-progreso-wrap">
+          <div id="barraIntro" class="barra-progreso-fill"></div>
+        </div>
+        <p id="textoIntroPct" style="font-size:12px;color:#7dd3fc;margin:4px 0 14px;">Iniciando sistema... 0%</p>
+        <button class="btn-principal" onclick="irALogin()">🚀 ENTRAR AL SISTEMA</button>
+      </div>
+
+      <!-- 2. ACCESO -->
+      <div id="pantallaLogin" class="oculto">
+        <img src="logo.png" class="avatar-circular" alt="Logo ELHACKERLEOYT" />
+        <h3>DOMINGUEZ JAIMES</h3>
+        <p>Contraseña requerida</p>
+        <div class="campo-clave">
+          <input type="password" id="inputClave" placeholder="Ingresa la clave" autocomplete="off" />
+          <button type="button" class="btn-ojo" onclick="toggleClave()" title="Mostrar / Ocultar">👁️</button>
+        </div>
+        <button class="btn-principal" onclick="verificarClave()">🔓 DESBLOQUEAR</button>
+        <p id="mensajeError">⚠ Acceso denegado. Clave incorrecta.</p>
+        <button type="button" class="btn-link-sutil" onclick="verIntro()">Ver intro nuevamente</button>
+      </div>
+
+      <!-- 3. BIENVENIDOS -->
+      <div id="bienvenida" class="oculto">
+        <img src="logo.png" class="avatar-circular" alt="Logo ELHACKERLEOYT" />
+        <h2>✨ ¡BIENVENIDOS! ✨</h2>
+        <h3>DOMINGUEZ JAIMES</h3>
+        <p>Acceso autorizado correctamente.</p>
+        <p>Preparando tu panel de descargas y carpeta de scripts... espere</p>
+        <div class="barra-progreso-wrap">
+          <div id="barraBienvenida" class="barra-progreso-fill"></div>
+        </div>
+        <button type="button" class="btn-mini" style="margin-top:10px;" onclick="abrirPanel()">Continuar ahora →</button>
+      </div>
+
+      <!-- 4. PANEL PRINCIPAL (DESCARGAS + CARPETA APARTE DE SCRIPTS) -->
+      <div id="pantallaPanel" class="oculto">
+        <div style="text-align:center;">
+          <img id="avatarPanel" src="logo.png" class="avatar-circular" alt="Logo ELHACKERLEOYT" />
+          <h3 id="tituloPanel">PANEL DE DESCARGAS</h3>
+          <p id="subtituloPanel">Aplicaciones de Windows disponibles:</p>
+
+          <div class="contador">
+            <span>⏳ Tiempo restante: <span id="tiempo">02:00</span></span>
+            <button type="button" class="btn-mini" onclick="reiniciarTemporizador()" title="Reiniciar 02:00">↻</button>
+          </div>
+
+          <div class="tabs-carpetas">
+            <button type="button" id="tabDescargas" class="tab-btn activo" onclick="cambiarCarpeta('descargas')">📦 Descargas</button>
+            <button type="button" id="tabScripts" class="tab-btn" onclick="cambiarCarpeta('scripts')">📁 Scripts CMD</button>
+          </div>
+        </div>
+
+        <!-- CARPETA 1: DESCARGAS ORIGINALES CONSERVADAS -->
+        <div id="vistaDescargas">
+          <div class="seccion-descargas">
+            <a href="" class="carpeta-link" target="_blank" rel="noopener noreferrer">🖨️ Descargar Driver Impresora HP</a>
+            <a href="ONLYOFFICEDesktopInstaller%20(1).exe" class="carpeta-link" download>📄 Descargar OFFICE</a>
+            <a href="wrar370es%20(1).exe" class="carpeta-link" download>📦 Descargar WinRAR</a>
+            <a href="2019.rar" class="carpeta-link" download>💿 Descargar OFFICE 2019</a>
+          </div>
+
+          <div class="separador-carpeta">
+            <p style="font-size:12px;margin-bottom:8px;">¿Necesitas comandos CMD, bloqueo VPN, Hosts u Office?</p>
+            <button type="button" class="btn-abrir-scripts" onclick="cambiarCarpeta('scripts')">
+              📁 Abrir Carpeta: Scripts y Comandos CMD
+            </button>
+          </div>
+        </div>
+
+        <!-- CARPETA 2: SCRIPTS Y COMANDOS (INDEPENDIENTE) -->
+        <div id="vistaScripts" class="oculto">
+          <div class="scripts-header">
+            <div>
+              <strong style="color:#00eaff;font-size:15px;">📁 Carpeta Técnica CMD y Políticas</strong>
+              <div style="font-size:12px;color:#cbd5e1;margin-top:2px;">Guías editadas listas para copiar o descargar en .TXT / .BAT</div>
+            </div>
+            <div style="width:240px;max-width:100%;">
+              <input type="search" id="buscadorScripts" placeholder="Buscar VPN, hosts, Office, sfc..." oninput="renderListaScripts()" />
+            </div>
+          </div>
+
+          <div class="scripts-grid">
+            <div id="listaScripts" class="scripts-lista"></div>
+            <div id="detalleScript" class="script-detalle"></div>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <button type="button" class="btn-regresar" onclick="regresar()">⬅ REGRESAR</button>
+        </div>
+      </div>
+
+      <!-- 5. DESPEDIDA -->
+      <div id="despedida" class="oculto">
+        <img src="logo.png" class="avatar-circular" alt="Logo ELHACKERLEOYT" />
+        <h2>🔒 SESIÓN FINALIZADA</h2>
+        <h3>¡GRACIAS POR VISITAR MI WEB!</h3>
+        <p>El tiempo de acceso ha terminado.</p>
+        <p>El sistema se ha bloqueado nuevamente.</p>
+        <button class="btn-principal" onclick="volverAcceso()">🔐 VOLVER AL ACCESO</button>
+      </div>
+    </div>
+
+    <div class="pie">DOMINGUEZ © 2026</div>
+  </div>
+
+  <script>
+    // Partículas neón
+    const particulas = document.getElementById('particulas');
+    for (let i = 0; i < 45; i++) {
+      const p = document.createElement('div');
+      p.className = 'particula';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDuration = (5 + Math.random() * 10) + 's';
+      p.style.animationDelay = Math.random() * 8 + 's';
+      p.style.opacity = (0.35 + Math.random() * 0.65).toFixed(2);
+      particulas.appendChild(p);
+    }
+
+    // Datos editados de la carpeta Scripts y Comandos
+    const SCRIPTS_DATA = [
+      {
+        id: 'bloqueador-vpn',
+        tituloCorto: 'Bloqueador VPN y Extensiones',
+        titulo: 'Bloqueador de VPN y Extensiones en Chrome',
+        categoria: 'Políticas Chrome',
+        archivo: 'bloqueador_de_VPN.txt',
+        resumen: 'Impide la instalación de extensiones y bloquea páginas con "vpn" en Chrome mediante políticas del Registro.',
+        pasos: [
+          {
+            titulo: '1. Bloquear todas las extensiones de Chrome',
+            desc: 'Impide instalar extensiones nuevas (requiere permisos de administrador).',
+            cmd: 'reg add "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\ExtensionInstallBlocklist" /v "1" /t REG_SZ /d "*" /f'
+          },
+          {
+            titulo: '2. Bloquear páginas que contengan «vpn»',
+            desc: 'Restringe direcciones URL en Chrome que coincidan con *vpn*.',
+            cmd: 'reg add "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\URLBlocklist" /v "1" /t REG_SZ /d "*vpn*" /f'
+          },
+          {
+            titulo: '3. Actualizar las políticas de Windows',
+            desc: 'Actualiza las directivas de grupo aplicables.',
+            cmd: 'gpupdate /force'
+          }
+        ],
+        verificacion: [
+          'Cierra y vuelve a abrir Google Chrome.',
+          'Escribe chrome://policy en la barra de direcciones.',
+          'Pulsa "Volver a cargar políticas" y confirma ExtensionInstallBlocklist y URLBlocklist.'
+        ],
+        raw: `@echo off\nreg add "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\ExtensionInstallBlocklist" /v "1" /t REG_SZ /d "*" /f\nreg add "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\URLBlocklist" /v "1" /t REG_SZ /d "*vpn*" /f\ngpupdate /force\npause`
+      },
+      {
+        id: 'desbloqueador-vpn',
+        tituloCorto: 'Desbloqueador VPN y Extensiones',
+        titulo: 'Desbloqueador de VPN y Extensiones en Chrome',
+        categoria: 'Políticas Chrome',
+        archivo: 'desbloqueador_de_vpn.txt',
+        resumen: 'Elimina las restricciones de políticas de Chrome para volver a permitir extensiones y sitios VPN.',
+        pasos: [
+          {
+            titulo: '1. Desbloquear extensiones de Chrome',
+            desc: 'Elimina la restricción que impedía instalar extensiones.',
+            cmd: 'reg delete "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\ExtensionInstallBlocklist" /f'
+          },
+          {
+            titulo: '2. Desbloquear páginas que contengan «vpn»',
+            desc: 'Elimina el bloqueo de URLs con el patrón *vpn*.',
+            cmd: 'reg delete "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\URLBlocklist" /f'
+          },
+          {
+            titulo: '3. Actualizar las políticas de Windows',
+            desc: 'Fuerza la aplicación inmediata de los cambios.',
+            cmd: 'gpupdate /force'
+          }
+        ],
+        raw: `@echo off\nreg delete "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\ExtensionInstallBlocklist" /f\nreg delete "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Google\\Chrome\\URLBlocklist" /f\ngpupdate /force\npause`
+      },
+      {
+        id: 'bloqueador-rs',
+        tituloCorto: 'Bloqueador Redes Sociales',
+        titulo: 'Bloqueador de Redes Sociales (Hosts + DNS)',
+        categoria: 'Red y Hosts',
+        archivo: 'bloqueador_rs.txt',
+        resumen: 'Bloquea Facebook e Instagram mediante el archivo hosts de Windows y limpia la caché DNS.',
+        pasos: [
+          {
+            titulo: '1. Bloquear Facebook en archivo hosts',
+            desc: 'Agrega las entradas de redirección local para Facebook.',
+            cmd: 'echo 127.0.0.1 facebook.com >> %windir%\\system32\\drivers\\etc\\hosts\necho 127.0.0.1 www.facebook.com >> %windir%\\system32\\drivers\\etc\\hosts'
+          },
+          {
+            titulo: '2. Bloquear Instagram en archivo hosts',
+            desc: 'Agrega las entradas de redirección local para Instagram.',
+            cmd: 'echo 127.0.0.1 instagram.com >> %windir%\\system32\\drivers\\etc\\hosts\necho 127.0.0.1 www.instagram.com >> %windir%\\system32\\drivers\\etc\\hosts'
+          },
+          {
+            titulo: '3. Limpiar caché de red (DNS)',
+            desc: 'Aplica los cambios inmediatamente en todos los navegadores.',
+            cmd: 'ipconfig /flushdns'
+          }
+        ],
+        raw: `@echo off\necho 127.0.0.1 facebook.com >> %windir%\\system32\\drivers\\etc\\hosts\necho 127.0.0.1 www.facebook.com >> %windir%\\system32\\drivers\\etc\\hosts\necho 127.0.0.1 instagram.com >> %windir%\\system32\\drivers\\etc\\hosts\necho 127.0.0.1 www.instagram.com >> %windir%\\system32\\drivers\\etc\\hosts\nipconfig /flushdns\npause`
+      },
+      {
+        id: 'office-2019',
+        tituloCorto: 'Office 2019 (OSPP.VBS)',
+        titulo: 'Diagnóstico y Activación Office 2019 (OSPP.VBS)',
+        categoria: 'Microsoft Office',
+        archivo: 'office_ospp_comandos.txt',
+        resumen: 'Consulta el estado de licencia instalada e ingresa o activa una clave MAK legítima de Office 2019.',
+        pasos: [
+          {
+            titulo: '1. Consultar estado de activación actual',
+            desc: 'Muestra el estado de la licencia instalada y los últimos 5 caracteres de la clave.',
+            cmd: 'cscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /dstatus'
+          },
+          {
+            titulo: '2. Comprobar estado completo y ayuda',
+            desc: 'Muestra todas las licencias detectadas o los comandos disponibles.',
+            cmd: 'cscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /dstatusall\ncscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /?'
+          },
+          {
+            titulo: '3. Introducir clave MAK válida',
+            desc: 'Sustituye las X por la clave real proporcionada por tu empresa o proveedor.',
+            cmd: 'cscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /inpkey:XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+          },
+          {
+            titulo: '4. Solicitar activación y verificar',
+            desc: 'Activa la licencia y comprueba el resultado.',
+            cmd: 'cscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /act\ncscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /dstatus'
+          }
+        ],
+        raw: `cscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /dstatus\ncscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /dstatusall\n:: cscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /inpkey:XXXXX-XXXXX-XXXXX-XXXXX-XXXXX\n:: cscript //nologo "C:\\Program Files\\Microsoft Office\\Office16\\OSPP.VBS" /act`
+      },
+      {
+        id: 'cmd-avanzados',
+        tituloCorto: 'Comandos CMD Avanzados',
+        titulo: 'Comandos CMD Avanzados de Sistema y Red',
+        categoria: 'Diagnóstico CMD',
+        archivo: 'comandos_cmd_avanzados.txt',
+        resumen: 'Referencia rápida de comandos esenciales para diagnóstico, procesos, red y reparación de Windows.',
+        tabla: [
+          ['systeminfo', 'Muestra información completa del equipo.'],
+          ['tasklist', 'Lista los procesos en ejecución.'],
+          ['taskkill /PID 1234 /F', 'Finaliza un proceso por su PID.'],
+          ['ipconfig /all', 'Muestra la configuración de red.'],
+          ['arp -a', 'Consulta la caché ARP de la red local.'],
+          ['netstat -ano', 'Muestra conexiones y puertos con PID.'],
+          ['sfc /scannow', 'Comprueba y repara archivos protegidos de Windows.'],
+          ['DISM /Online /Cleanup-Image /ScanHealth', 'Examina la imagen de Windows.'],
+          ['chkdsk C: /scan', 'Busca errores del sistema de archivos en C:.'],
+          ['gpresult /r', 'Muestra las directivas de grupo aplicadas.']
+        ],
+        raw: `systeminfo\ntasklist\ntaskkill /PID 1234 /F\nipconfig /all\narp -a\nnetstat -ano\nsfc /scannow\nDISM /Online /Cleanup-Image /ScanHealth\nchkdsk C: /scan\ngpresult /r`
+      }
+    ];
+
+    let scriptSeleccionadoId = SCRIPTS_DATA[0].id;
+    let intervalo = null;
+    let tiempoRestante = 120;
+    let bienvenidaTimer = null;
+    let despedidaTimer = null;
+
+    function ocultarTodo() {
+      ['pantallaIntro', 'pantallaLogin', 'bienvenida', 'pantallaPanel', 'despedida'].forEach(id => {
+        document.getElementById(id).classList.add('oculto');
+      });
+      document.getElementById('tarjetaPrincipal').classList.remove('modo-amplio');
+    }
+
+    // Intro inicial con barra animada
+    function animarIntro() {
+      let pct = 0;
+      const barra = document.getElementById('barraIntro');
+      const txt = document.getElementById('textoIntroPct');
+      barra.style.width = '0%';
+      const t = setInterval(() => {
+        pct = Math.min(100, pct + 5);
+        barra.style.width = pct + '%';
+        txt.textContent = pct < 100 ? `Iniciando sistema... ${pct}%` : 'Sistema listo · 100%';
+        if (pct >= 100) clearInterval(t);
+      }, 90);
+    }
+    animarIntro();
+
+    function irALogin() {
+      ocultarTodo();
+      document.getElementById('pantallaLogin').classList.remove('oculto');
+      document.getElementById('inputClave').focus();
+    }
+
+    function verIntro() {
+      ocultarTodo();
+      document.getElementById('pantallaIntro').classList.remove('oculto');
+      animarIntro();
+    }
+
+    function toggleClave() {
+      const inp = document.getElementById('inputClave');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+    }
+
+    function verificarClave() {
+      const password = document.getElementById('inputClave').value.trim();
+      const mensaje = document.getElementById('mensajeError');
+      if (password === '2004') {
+        mensaje.style.display = 'none';
+        ocultarTodo();
+        document.getElementById('bienvenida').classList.remove('oculto');
+        let pct = 0;
+        const barra = document.getElementById('barraBienvenida');
+        barra.style.width = '0%';
+        const anim = setInterval(() => {
+          pct = Math.min(100, pct + 4);
+          barra.style.width = pct + '%';
+          if (pct >= 100) clearInterval(anim);
+        }, 90);
+        clearTimeout(bienvenidaTimer);
+        bienvenidaTimer = setTimeout(abrirPanel, 2500);
+      } else {
+        mensaje.style.display = 'block';
+        document.getElementById('inputClave').value = '';
+      }
+    }
+
+    function abrirPanel() {
+      clearTimeout(bienvenidaTimer);
+      ocultarTodo();
+      document.getElementById('pantallaPanel').classList.remove('oculto');
+      cambiarCarpeta('descargas');
+      iniciarTemporizador();
+      renderListaScripts();
+    }
+
+    function cambiarCarpeta(carpeta) {
+      const tarjeta = document.getElementById('tarjetaPrincipal');
+      const avatar = document.getElementById('avatarPanel');
+      const titulo = document.getElementById('tituloPanel');
+      const sub = document.getElementById('subtituloPanel');
+      const tabD = document.getElementById('tabDescargas');
+      const tabS = document.getElementById('tabScripts');
+      const vistaD = document.getElementById('vistaDescargas');
+      const vistaS = document.getElementById('vistaScripts');
+
+      if (carpeta === 'scripts') {
+        tarjeta.classList.add('modo-amplio');
+        avatar.classList.add('avatar-pequeno');
+        titulo.textContent = 'CARPETA: SCRIPTS Y COMANDOS';
+        sub.style.display = 'none';
+        tabD.classList.remove('activo');
+        tabS.classList.add('activo');
+        vistaD.classList.add('oculto');
+        vistaS.classList.remove('oculto');
+        renderListaScripts();
+      } else {
+        tarjeta.classList.remove('modo-amplio');
+        avatar.classList.remove('avatar-pequeno');
+        titulo.textContent = 'PANEL DE DESCARGAS';
+        sub.style.display = 'block';
+        tabS.classList.remove('activo');
+        tabD.classList.add('activo');
+        vistaS.classList.add('oculto');
+        vistaD.classList.remove('oculto');
+      }
+    }
+
+    function iniciarTemporizador() {
+      clearInterval(intervalo);
+      tiempoRestante = 120;
+      actualizarTiempo();
+      intervalo = setInterval(() => {
+        tiempoRestante--;
+        actualizarTiempo();
+        if (tiempoRestante <= 0) {
+          clearInterval(intervalo);
+          finalizarSesion();
+        }
+      }, 1000);
+    }
+
+    function reiniciarTemporizador() {
+      iniciarTemporizador();
+    }
+
+    function actualizarTiempo() {
+      const m = Math.floor(tiempoRestante / 60);
+      const s = tiempoRestante % 60;
+      document.getElementById('tiempo').textContent =
+        String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    function regresar() {
+      clearInterval(intervalo);
+      ocultarTodo();
+      document.getElementById('pantallaLogin').classList.remove('oculto');
+      document.getElementById('inputClave').value = '';
+    }
+
+    function finalizarSesion() {
+      ocultarTodo();
+      document.getElementById('despedida').classList.remove('oculto');
+      clearTimeout(despedidaTimer);
+      despedidaTimer = setTimeout(volverAcceso, 4000);
+    }
+
+    function volverAcceso() {
+      clearInterval(intervalo);
+      clearTimeout(despedidaTimer);
+      ocultarTodo();
+      document.getElementById('pantallaLogin').classList.remove('oculto');
+      document.getElementById('inputClave').value = '';
+      document.getElementById('mensajeError').style.display = 'none';
+    }
+
+    function renderListaScripts() {
+      const q = (document.getElementById('buscadorScripts').value || '').trim().toLowerCase();
+      const filtrados = SCRIPTS_DATA.filter(s => {
+        if (!q) return true;
+        return (
+          s.titulo.toLowerCase().includes(q) ||
+          s.categoria.toLowerCase().includes(q) ||
+          s.resumen.toLowerCase().includes(q) ||
+          s.raw.toLowerCase().includes(q)
+        );
+      });
+
+      const lista = document.getElementById('listaScripts');
+      const detalle = document.getElementById('detalleScript');
+
+      if (filtrados.length === 0) {
+        lista.innerHTML = '';
+        detalle.innerHTML = `<p style="text-align:center;margin:20px 0;">No se encontraron scripts para "${q}".</p>`;
+        return;
+      }
+
+      if (!filtrados.some(s => s.id === scriptSeleccionadoId)) {
+        scriptSeleccionadoId = filtrados[0].id;
+      }
+
+      lista.innerHTML = filtrados.map(s => `
+        <button type="button" class="script-item-btn ${s.id === scriptSeleccionadoId ? 'activo' : ''}" onclick="seleccionarScript('${s.id}')">
+          <span class="script-item-titulo">📁 ${s.tituloCorto}</span>
+          <span class="script-item-sub">${s.categoria} · ${s.archivo}</span>
+        </button>
+      `).join('');
+
+      const activo = filtrados.find(s => s.id === scriptSeleccionadoId) || filtrados[0];
+      let html = `
+        <div class="detalle-top">
+          <div>
+            <div style="font-size:12px;color:#00eaff;">${activo.categoria} · ${activo.archivo}</div>
+            <h3 style="margin:4px 0 6px;font-size:19px;">${activo.titulo}</h3>
+            <p style="margin:0;font-size:13px;">${activo.resumen}</p>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button type="button" class="btn-mini" onclick="descargarScript('${activo.id}','txt')">⬇ .TXT</button>
+            <button type="button" class="btn-mini" onclick="descargarScript('${activo.id}','bat')">⬇ .BAT</button>
+          </div>
+        </div>
+        <div class="aviso-admin">⚠️ Ejecuta el Símbolo del sistema (CMD) como <strong>Administrador</strong> antes de aplicar estos comandos.</div>
+      `;
+
+      if (activo.pasos) {
+        activo.pasos.forEach((p, idx) => {
+          html += `
+            <div class="paso-bloque">
+              <div class="paso-top">
+                <span class="paso-titulo">${p.titulo}</span>
+                <button type="button" class="btn-mini" onclick="copiarTexto(this, '${activo.id}', ${idx})">📋 Copiar</button>
+              </div>
+              <p style="margin:6px 0;font-size:12px;">${p.desc}</p>
+              <pre class="cmd-code">${escapeHtml(p.cmd)}</pre>
+            </div>
+          `;
+        });
+      }
+
+      if (activo.tabla) {
+        html += `<table class="cmd-tabla"><thead><tr><th>Comando</th><th>Función</th><th></th></tr></thead><tbody>`;
+        activo.tabla.forEach((row, idx) => {
+          html += `
+            <tr>
+              <td><code>${escapeHtml(row[0])}</code></td>
+              <td>${escapeHtml(row[1])}</td>
+              <td style="text-align:right;"><button type="button" class="btn-mini" onclick="copiarTabla(this, '${activo.id}', ${idx})">📋 Copiar</button></td>
+            </tr>
+          `;
+        });
+        html += `</tbody></table>`;
+      }
+
+      if (activo.verificacion) {
+        html += `<div class="paso-bloque"><strong style="font-size:13px;color:#fff;">Cómo comprobar si se aplicaron:</strong><ol style="margin:8px 0 0 18px;padding:0;font-size:12px;color:#cbd5e1;">`;
+        activo.verificacion.forEach(v => { html += `<li style="margin-bottom:4px;">${v}</li>`; });
+        html += `</ol></div>`;
+      }
+
+      detalle.innerHTML = html;
+    }
+
+    function seleccionarScript(id) {
+      scriptSeleccionadoId = id;
+      renderListaScripts();
+    }
+
+    function copiarAlPortapapeles(btn, texto) {
+      navigator.clipboard.writeText(texto).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = '✅ Copiado';
+        setTimeout(() => { btn.textContent = orig; }, 1600);
+      });
+    }
+
+    function copiarTexto(btn, id, idx) {
+      const s = SCRIPTS_DATA.find(x => x.id === id);
+      if (s && s.pasos && s.pasos[idx]) copiarAlPortapapeles(btn, s.pasos[idx].cmd);
+    }
+
+    function copiarTabla(btn, id, idx) {
+      const s = SCRIPTS_DATA.find(x => x.id === id);
+      if (s && s.tabla && s.tabla[idx]) copiarAlPortapapeles(btn, s.tabla[idx][0]);
+    }
+
+    function descargarScript(id, ext) {
+      const s = SCRIPTS_DATA.find(x => x.id === id);
+      if (!s) return;
+      const nombre = s.archivo.replace(/\.txt$/i, '') + '.' + ext;
+      const blob = new Blob([s.raw], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombre;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    document.getElementById('inputClave').addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') verificarClave();
+    });
+  </script>
+</body>
+</html>
