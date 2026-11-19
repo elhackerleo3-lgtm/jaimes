@@ -873,7 +873,15 @@
         pct = Math.min(100, pct + 5);
         barra.style.width = pct + '%';
         txt.textContent = pct < 100 ? `Iniciando sistema... ${pct}%` : 'Sistema listo · 100%';
-        if (pct >= 100) clearInterval(t);
+           if (pct >= 100) {
+          clearInterval(t);
+          setTimeout(() => {
+            if (!document.getElementById('pantallaIntro').classList.contains('oculto')) {
+              irALogin();
+            }
+          }, 500);
+        }
+
       }, 90);
     }
     animarIntro();
