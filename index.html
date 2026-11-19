@@ -642,7 +642,7 @@
             <button type="button" id="tabDescargas" class="tab-btn activo" onclick="cambiarCarpeta('descargas')">📦 Descargas</button>
             <button type="button" id="tabScripts" class="tab-btn" onclick="cambiarCarpeta('scripts')">📁 Scripts CMD</button>
           </div>
-        </div>
+        </div>A
 
         <!-- CARPETA 1: DESCARGAS ORIGINALES CONSERVADAS -->
         <div id="vistaDescargas">
@@ -1116,11 +1116,34 @@
       if (s && s.tabla && s.tabla[idx]) copiarAlPortapapeles(btn, s.tabla[idx][0]);
     }
 
-    function descargarScript(id, ext) {
+       function descargarScript(id, ext) {
       const s = SCRIPTS_DATA.find(x => x.id === id);
       if (!s) return;
       const nombre = s.archivo.replace(/\.txt$/i, '') + '.' + ext;
-      const blob = new Blob([s.raw], { type: 'text/plain;charset=utf-8' });
+      let contenido = s.raw || '';
+
+      if (ext === 'bat') {
+        const comandos = s.pasos
+          ? s.pasos.map(p => p.cmd).join('\r\n')
+          : (s.raw || '');
+        contenido = [
+          '@echo off',
+          'net session >nul 2>&1',
+          'if %errorLevel% neq 0 (',
+          '    powershell -Command "Start-Process \'%~f0\' -Verb RunAs"',
+          '    exit /b',
+          ')',
+          'cd /d "%~dp0"',
+          '',
+          comandos,
+          '',
+          'echo.',
+          'echo Proceso finalizado.',
+          'pause'
+        ].join('\r\n');
+      }
+
+      const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -1130,6 +1153,7 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
+
 
     function escapeHtml(str) {
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
