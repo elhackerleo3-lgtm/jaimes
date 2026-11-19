@@ -1055,13 +1055,16 @@
         <div class="aviso-admin">⚠️ Ejecuta el Símbolo del sistema (CMD) como <strong>Administrador</strong> antes de aplicar estos comandos.</div>
       `;
 
-      if (activo.pasos) {
+            if (activo.pasos) {
         activo.pasos.forEach((p, idx) => {
           html += `
             <div class="paso-bloque">
               <div class="paso-top">
                 <span class="paso-titulo">${p.titulo}</span>
-                <button type="button" class="btn-mini" onclick="copiarTexto(this, '${activo.id}', ${idx})">📋 Copiar</button>
+                <div style="display:flex;gap:6px;">
+                  <button type="button" class="btn-mini" onclick="copiarTexto(this, '${activo.id}', ${idx})">📋 Copiar</button>
+                  <button type="button" class="btn-mini" onclick="descargarPasoBat('${activo.id}', ${idx})">⚡ .BAT</button>
+                </div>
               </div>
               <p style="margin:6px 0;font-size:12px;">${p.desc}</p>
               <pre class="cmd-code">${escapeHtml(p.cmd)}</pre>
@@ -1071,18 +1074,22 @@
       }
 
       if (activo.tabla) {
-        html += `<table class="cmd-tabla"><thead><tr><th>Comando</th><th>Función</th><th></th></tr></thead><tbody>`;
+        html += `<table class="cmd-tabla"><thead><tr><th>COMANDO</th><th>FUNCIÓN</th><th>ACCIÓN</th></tr></thead><tbody>`;
         activo.tabla.forEach((row, idx) => {
           html += `
             <tr>
               <td><code>${escapeHtml(row[0])}</code></td>
               <td>${escapeHtml(row[1])}</td>
-              <td style="text-align:right;"><button type="button" class="btn-mini" onclick="copiarTabla(this, '${activo.id}', ${idx})">📋 Copiar</button></td>
+              <td style="text-align:right;white-space:nowrap;">
+                <button type="button" class="btn-mini" onclick="copiarTabla(this, '${activo.id}', ${idx})">📋 Copiar</button>
+                <button type="button" class="btn-mini" onclick="descargarTablaBat('${activo.id}', ${idx})">⚡ .BAT</button>
+              </td>
             </tr>
           `;
         });
         html += `</tbody></table>`;
       }
+
 
       if (activo.verificacion) {
         html += `<div class="paso-bloque"><strong style="font-size:13px;color:#fff;">Cómo comprobar si se aplicaron:</strong><ol style="margin:8px 0 0 18px;padding:0;font-size:12px;color:#cbd5e1;">`;
@@ -1114,6 +1121,49 @@
     function copiarTabla(btn, id, idx) {
       const s = SCRIPTS_DATA.find(x => x.id === id);
       if (s && s.tabla && s.tabla[idx]) copiarAlPortapapeles(btn, s.tabla[idx][0]);
+    }
+    function generarBatAdmin(nombreArchivo, comando) {
+      const contenido = [
+        '@echo off',
+        'net session >nul 2>&1',
+        'if %errorLevel% neq 0 (',
+        '    powershell -Command "Start-Process \'%~f0\' -Verb RunAs"',
+        '    exit /b',
+        ')',
+        'cd /d "%~dp0"',
+        '',
+        comando,
+        '',
+        'echo.',
+        'echo Comando ejecutado.',
+        'pause'
+      ].join('\r\n');
+
+      const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombreArchivo;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function descargarPasoBat(id, idx) {
+      const s = SCRIPTS_DATA.find(x => x.id === id);
+      if (s && s.pasos && s.pasos[idx]) {
+        generarBatAdmin(`${s.id}_paso_${idx + 1}.bat`, s.pasos[idx].cmd);
+      }
+    }
+
+    function descargarTablaBat(id, idx) {
+      const s = SCRIPTS_DATA.find(x => x.id === id);
+      if (s && s.tabla && s.tabla[idx]) {
+        const cmd = s.tabla[idx][0];
+        const nombreLimpio = cmd.split(' ')[0].replace(/[^a-zA-Z0-9_-]/g, '');
+        generarBatAdmin(`${nombreLimpio || 'comando'}.bat`, cmd);
+      }
     }
 
        function descargarScript(id, ext) {
